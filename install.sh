@@ -29,7 +29,7 @@ installnginx(){
 	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
 	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
-	openssl x509 -req -days 3650 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
+	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
 	echo -e "${Info} nginx服务配置中..."
 	wget -P /etc/nginx/ -N --no-check-certificate http://${github}/nginx/nginx.conf	
 	echo -e "${Info} 开始初始化网站内容为java帮助文件..."	
