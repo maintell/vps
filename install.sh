@@ -12,20 +12,28 @@ Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
 #安装udp2raw
 installudp2raw(){
-	mkdir /root/udp	
+	echo -e "${Info} 开始安装udp2raw..."
+	mkdir /root/udp		
+	echo -e "${Info} 下载udp2raw必要的文件..."
 	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64
 	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh
 	chmod +x /root/udp/udp2raw_amd64
-	chmod +x /root/udp/start.sh
-	echo "* * * * * echo /root/udp/udp2raw_amd64 -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp --cipher-mode xor --auth-mode simple -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
+	chmod +x /root/udp/start.sh	
+	echo -e "${Info} udp2raw加入定时任务..."
+	echo "* * * * * /root/udp/start.sh -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp --cipher-mode xor --auth-mode simple -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
+	echo -e "${Info} 重启定时任务..."
 	systemctl restart crond
 }
 
 #安装v2
-installv2(){
+installv2(){	
+	echo -e "${Info} 官方安装脚本执行中..."
 	bash <(curl -L -s https://install.direct/go.sh)
+	echo -e "${Info} v2配置中..."
 	wget -P /etc/v2ray -N --no-check-certificate http://${github}/v2/config.json
+	echo -e "${Info} v2服务使能..."
 	systemctl enable v2ray
+	echo -e "${Info} 重启v2服务..."
 	systemctl restart v2ray
 }
 
