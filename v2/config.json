@@ -1,0 +1,235 @@
+{
+	"log": {
+		"access": "/var/log/v2ray/access.log",
+		"error": "/var/log/v2ray/error.log",
+		"loglevel": "warning"
+	},
+	"inbound": {
+		"port": 3306,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"detour": {
+			"to": "vmess-detour-tcp"
+		},
+		"sniffing": {
+			"enabled": true,
+			"destOverride": ["http", "tls"]
+		}
+	},
+	"outbound": {
+		"protocol": "freedom",
+		"settings": {}
+	},
+	"inboundDetour": [{
+		"protocol": "vmess",
+		"port": "2000-57000",
+		"tag": "vmess-detour-tcp",
+		"settings": {},
+		"allocate": {
+			"strategy": "random",
+			"concurrency": 10,
+			"refresh": 600
+		}
+	}, {
+		"protocol": "vmess",
+		"port": "16393-56402",
+		"tag": "vmess-detour-16384",
+		"settings": {},
+		"allocate": {
+			"strategy": "random",
+			"concurrency": 10,
+			"refresh": 600
+		},
+		"streamSettings": {
+			"network": "kcp"
+		}
+	}, {
+		"port": 16384,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				}
+			}
+		},
+		"detour": {
+			"to": "vmess-detour-16384"
+		}
+	}, {
+		"port": 53,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				}
+			}
+		}
+	}, {
+		"port": 123,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				}
+			}
+		}
+	}, {
+		"port": 5060,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				}
+			}
+		}
+	}, {
+		"port": 27010,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				}
+			}
+		}
+	}, {
+		"port": 50080,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "ws",
+			"wsSettings": {
+				"path": "/ws"
+			}
+		}
+	}],
+	"outboundDetour": [{
+			"protocol": "blackhole",
+			"settings": {},
+			"tag": "blocked"
+		}],
+	"routing": {
+		"strategy": "rules",
+		"settings": {
+			"rules": [
+				{
+					"type": "field",
+					"domain": [
+						"geosite:category-ads"
+					],
+					"outboundTag": "blocked"
+				},{
+				"type": "field",
+				"ip": [
+					"0.0.0.0/8",
+					"10.0.0.0/8",
+					"100.64.0.0/10",
+					"127.0.0.0/8",
+					"169.254.0.0/16",
+					"172.16.0.0/12",
+					"192.0.0.0/24",
+					"192.0.2.0/24",
+					"192.168.0.0/16",
+					"198.18.0.0/15",
+					"198.51.100.0/24",
+					"203.0.113.0/24",
+					"::1/128",
+					"fc00::/7",
+					"fe80::/10"
+				],
+				"outboundTag": "blocked"
+			}]
+		}
+	}
+}
