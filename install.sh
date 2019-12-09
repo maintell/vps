@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.2"
+sh_ver="1.3.3"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -23,6 +23,7 @@ installudp2raw(){
 	echo "* * * * * /root/udp/start.sh -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp --cipher-mode xor --auth-mode simple -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
 	echo -e "${Info} 重启定时任务..."
 	systemctl restart crond
+	start_menu
 }
 
 #安装v2
@@ -35,6 +36,7 @@ installv2(){
 	systemctl enable v2ray
 	echo -e "${Info} 重启v2服务..."
 	systemctl restart v2ray
+	start_menu
 }
 
 #安装BBR内核
