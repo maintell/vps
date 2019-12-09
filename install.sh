@@ -10,6 +10,12 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
+systemctl stop firewalld
+systemctl disable firewalld
+sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
+sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
+setenforce 0
+
 #安装nginx
 installnginx(){
 	echo -e "${Info} 开始安装nginx所需的源..."
