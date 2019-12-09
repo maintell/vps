@@ -24,8 +24,14 @@ installnginx(){
 	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
 	openssl x509 -req -days 3650 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
+	echo -e "${Info} nginx服务配置中..."
+	wget -P /etc/nginx/ -N --no-check-certificate http://${github}/nginx/nginx.conf	
+	echo -e "${Info} 开始初始化网站内容为java帮助文件..."	
+	yum -y install unzip
+	wget -P /usr/share/nginx/html/ -N --no-check-certificate http://${github}/nginx/docs.zip
+	unzip -o -q /usr/share/nginx/html/docs.zip -d /usr/share/nginx/html/	
 	echo -e "${Info} 重启nginx服务..."
-	systemctl restart nginx	
+	systemctl restart nginx
 	start_menu
 }
 
