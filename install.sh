@@ -10,6 +10,25 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
+#安装udp2raw
+installudp2raw(){
+	mkdir /root/udp	
+	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64
+	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh
+	chmod +x /root/udp/udp2raw_amd64
+	chmod +x /root/udp/start.sh
+	echo "* * * * * echo /root/udp/udp2raw_amd64 -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp --cipher-mode xor --auth-mode simple -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
+	systemctl restart crond
+}
+
+#安装v2
+installv2(){
+	bash <(curl -L -s https://install.direct/go.sh)
+	wget -P /etc/v2ray -N --no-check-certificate http://${github}/v2/config.json
+	systemctl enable v2ray
+	systemctl restart v2ray
+}
+
 #安装BBR内核
 installbbr(){
 	kernel_version="4.11.8"
@@ -326,23 +345,25 @@ Update_Shell(){
 #开始菜单
 start_menu(){
 clear
-echo && echo -e " 一键安装管理脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
+echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_suffix}
   
- ${Green_font_prefix}0.${Font_color_suffix} 升级脚本
-————————————内核管理————————————
+ ${Green_font_prefix}0.${Font_color_suffix} 升级自己
+————————————内核————————————
  ${Green_font_prefix}1.${Font_color_suffix} 安装 BBR/BBR魔改版内核
  ${Green_font_prefix}2.${Font_color_suffix} 安装 BBRplus版内核 
  ${Green_font_prefix}3.${Font_color_suffix} 安装 Lotserver(锐速)内核
-————————————加速管理————————————
- ${Green_font_prefix}4.${Font_color_suffix} 使用BBR加速
- ${Green_font_prefix}5.${Font_color_suffix} 使用BBR魔改版加速
- ${Green_font_prefix}6.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
- ${Green_font_prefix}7.${Font_color_suffix} 使用BBRplus版加速
- ${Green_font_prefix}8.${Font_color_suffix} 使用Lotserver(锐速)加速
-————————————杂项管理————————————
- ${Green_font_prefix}9.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}10.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}11.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}4.${Font_color_suffix} 安装 v2
+ ${Green_font_prefix}5.${Font_color_suffix} 安装 udp2raw
+————————————加速————————————
+ ${Green_font_prefix}6.${Font_color_suffix} 使用BBR加速
+ ${Green_font_prefix}7.${Font_color_suffix} 使用BBR魔改版加速
+ ${Green_font_prefix}8.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
+ ${Green_font_prefix}9.${Font_color_suffix} 使用BBRplus版加速
+ ${Green_font_prefix}10.${Font_color_suffix} 使用Lotserver(锐速)加速
+————————————杂项————————————
+ ${Green_font_prefix}11.${Font_color_suffix} 卸载全部加速
+ ${Green_font_prefix}12.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}13.${Font_color_suffix} 退出脚本
 ————————————————————————————————" && echo
 
 	check_status
@@ -368,27 +389,33 @@ case "$num" in
 	check_sys_Lotsever
 	;;
 	4)
-	startbbr
+	installv2
 	;;
 	5)
-	startbbrmod
+	installudp2raw
 	;;
 	6)
-	startbbrmod_nanqinlang
+	startbbr
 	;;
 	7)
-	startbbrplus
+	startbbrmod
 	;;
 	8)
-	startlotserver
+	startbbrmod_nanqinlang
 	;;
 	9)
-	remove_all
+	startbbrplus
 	;;
 	10)
-	optimizing_system
+	startlotserver
 	;;
 	11)
+	remove_all
+	;;
+	12)
+	optimizing_system
+	;;
+	13)
 	exit 1
 	;;
 	*)
