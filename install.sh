@@ -10,6 +10,25 @@ Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
 
+#安装nginx
+installnginx(){
+	echo -e "${Info} 开始安装nginx所需的源..."
+	yum install -y epel-release
+	echo -e "${Info} yum安装nginx..."
+	yum install -y nginx
+	echo -e "${Info} nginx服务使能..."
+	systemctl enable nginx	
+	echo -e "${Info} nginx服务ssl自签名证书生成..."
+	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
+	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
+	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
+	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
+	openssl x509 -req -days 3650 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
+	echo -e "${Info} 重启nginx服务..."
+	systemctl restart nginx	
+	start_menu
+}
+
 #安装udp2raw
 installudp2raw(){
 	echo -e "${Info} 开始安装udp2raw..."
@@ -25,6 +44,7 @@ installudp2raw(){
 	systemctl restart crond
 	start_menu
 }
+
 
 #安装v2
 installv2(){	
