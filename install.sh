@@ -34,7 +34,6 @@ installnginx(){
 	systemctl restart nginx
 	start_menu
 }
-
 #安装udp2raw
 installudp2raw(){
 	echo -e "${Info} 开始安装udp2raw..."
@@ -50,8 +49,6 @@ installudp2raw(){
 	systemctl restart crond
 	start_menu
 }
-
-
 #安装v2
 installv2(){	
 	echo -e "${Info} 官方安装脚本执行中..."
@@ -64,7 +61,6 @@ installv2(){
 	systemctl restart v2ray
 	start_menu
 }
-
 #安装BBR内核
 installbbr(){
 	kernel_version="4.11.8"
@@ -97,7 +93,6 @@ installbbr(){
 		reboot
 	fi
 }
-
 #安装BBRplus内核
 installbbrplus(){
 	kernel_version="4.14.129-bbrplus"
@@ -124,7 +119,6 @@ installbbrplus(){
 		reboot
 	fi
 }
-
 #安装Lotserver内核
 installlot(){
 	if [[ "${release}" == "centos" ]]; then
@@ -150,7 +144,6 @@ installlot(){
 		reboot
 	fi
 }
-
 #启用BBR
 startbbr(){
 	remove_all
@@ -159,7 +152,6 @@ startbbr(){
 	sysctl -p
 	echo -e "${Info}BBR启动成功！"
 }
-
 #启用BBRplus
 startbbrplus(){
 	remove_all
@@ -168,7 +160,6 @@ startbbrplus(){
 	sysctl -p
 	echo -e "${Info}BBRplus启动成功！"
 }
-
 #编译并启用BBR魔改
 startbbrmod(){
 	remove_all
@@ -208,7 +199,6 @@ startbbrmod(){
     cd .. && rm -rf bbrmod
 	echo -e "${Info}魔改版BBR启动成功！"
 }
-
 #编译并启用BBR魔改
 startbbrmod_nanqinlang(){
 	remove_all
@@ -246,7 +236,6 @@ startbbrmod_nanqinlang(){
 	sysctl -p
 	echo -e "${Info}魔改版BBR启动成功！"
 }
-
 #启用Lotserver
 startlotserver(){
 	remove_all
@@ -264,7 +253,6 @@ maxmode=\"1\"">>/appex/etc/config
 	/appex/bin/lotServer.sh restart
 	start_menu
 }
-
 #卸载全部加速
 remove_all(){
 	rm -rf bbrmod
@@ -310,7 +298,6 @@ remove_all(){
 	echo -e "${Info}:清除加速完成。"
 	sleep 1s
 }
-
 #优化系统配置
 optimizing_system(){
 	sed -i '/fs.file-max/d' /etc/sysctl.conf
@@ -377,7 +364,6 @@ Update_Shell(){
 		sleep 5s
 	fi
 }
-
 #开始菜单
 start_menu(){
 clear
@@ -390,16 +376,17 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}3.${Font_color_suffix} 安装 Lotserver(锐速)内核
  ${Green_font_prefix}4.${Font_color_suffix} 安装 v2
  ${Green_font_prefix}5.${Font_color_suffix} 安装 udp2raw
+ ${Green_font_prefix}6.${Font_color_suffix} 安装 nginx 并配置好假网站
 ————————————加速————————————
- ${Green_font_prefix}6.${Font_color_suffix} 使用BBR加速
- ${Green_font_prefix}7.${Font_color_suffix} 使用BBR魔改版加速
- ${Green_font_prefix}8.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
- ${Green_font_prefix}9.${Font_color_suffix} 使用BBRplus版加速
- ${Green_font_prefix}10.${Font_color_suffix} 使用Lotserver(锐速)加速
+ ${Green_font_prefix}7.${Font_color_suffix} 使用BBR加速
+ ${Green_font_prefix}8.${Font_color_suffix} 使用BBR魔改版加速
+ ${Green_font_prefix}9.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
+ ${Green_font_prefix}10.${Font_color_suffix} 使用BBRplus版加速
+ ${Green_font_prefix}11.${Font_color_suffix} 使用Lotserver(锐速)加速
 ————————————杂项————————————
- ${Green_font_prefix}11.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}12.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}13.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}12.${Font_color_suffix} 卸载全部加速
+ ${Green_font_prefix}13.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}14.${Font_color_suffix} 退出脚本
 ————————————————————————————————" && echo
 
 	check_status
@@ -410,7 +397,7 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
 		
 	fi
 echo
-read -p " 请输入数字 [0-11]:" num
+read -p " 请输入数字 [0-14]:" num
 case "$num" in
 	0)
 	Update_Shell
@@ -431,32 +418,35 @@ case "$num" in
 	installudp2raw
 	;;
 	6)
-	startbbr
+	installnginx
 	;;
 	7)
-	startbbrmod
+	startbbr
 	;;
 	8)
-	startbbrmod_nanqinlang
+	startbbrmod
 	;;
 	9)
-	startbbrplus
+	startbbrmod_nanqinlang
 	;;
 	10)
-	startlotserver
+	startbbrplus
 	;;
 	11)
-	remove_all
+	startlotserver
 	;;
 	12)
-	optimizing_system
+	remove_all
 	;;
 	13)
+	optimizing_system
+	;;
+	14)
 	exit 1
 	;;
 	*)
 	clear
-	echo -e "${Error}:请输入正确数字 [0-11]"
+	echo -e "${Error}:请输入正确数字 [0-14]"
 	sleep 5s
 	start_menu
 	;;
