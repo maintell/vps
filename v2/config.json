@@ -33,8 +33,37 @@
 		"settings": {},
 		"allocate": {
 			"strategy": "random",
-			"concurrency": 10,
-			"refresh": 600
+			"concurrency": 30,
+			"refresh": 60
+		}
+	}, {
+		"protocol": "vmess",
+		"port": "20000-65500",
+		"tag": "vmess-detour-12468",
+		"settings": {},
+		"allocate": {
+			"strategy": "random",
+			"concurrency": 30,
+			"refresh": 60
+		},
+		"streamSettings": {
+			"network": "tcp"
+		}
+	}, {
+		"port": 12468,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "tcp"
+		},
+		"detour": {
+			"to": "vmess-detour-12468"
 		}
 	}, {
 		"protocol": "vmess",
@@ -43,8 +72,8 @@
 		"settings": {},
 		"allocate": {
 			"strategy": "random",
-			"concurrency": 10,
-			"refresh": 600
+			"concurrency": 30,
+			"refresh": 60
 		},
 		"streamSettings": {
 			"network": "kcp"
