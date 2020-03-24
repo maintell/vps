@@ -50,7 +50,7 @@ installudp2raw(){
 	chmod +x /root/udp/udp2raw_amd64
 	chmod +x /root/udp/start.sh	
 	echo -e "${Info} udp2raw加入定时任务..."
-	echo "* * * * * /root/udp/start.sh -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp --cipher-mode xor --auth-mode simple -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
+	echo "* * * * * /root/udp/start.sh -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell --raw-mode faketcp -a >/root/udp/log.txt 2>&1 &" >> /var/spool/cron/root
 	echo -e "${Info} 重启定时任务..."
 	systemctl restart crond
 	start_menu
