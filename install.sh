@@ -58,12 +58,12 @@ installudp2raw(){
 #安装v2
 installv2(){	
 	echo -e "${Info} 安装脚本执行中..."
-	mkdir /root/v2
-	wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
-	wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
-	# bash <(curl -L -s https://install.direct/go.sh)
-	chmod +x /root/v2/install-release.sh
-	/root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
+	# mkdir /root/v2
+	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
+	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
+	bash <(curl -L -s https://install.direct/go.sh)
+	# chmod +x /root/v2/install-release.sh
+	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
 	echo -e "${Info} v2配置中..."
 	wget -P /etc/v2ray -N --no-check-certificate http://${github}/v2/config.json
 	echo -e "${Info} v2服务使能..."
