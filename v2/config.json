@@ -76,7 +76,19 @@
 			"refresh": 60
 		},
 		"streamSettings": {
-			"network": "kcp"
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				},"seed": "maintell"
+			}
 		}
 	}, {
 		"port": 16384,
@@ -100,7 +112,7 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				}
+				},"seed": "maintell"
 			}
 		},
 		"detour": {
@@ -128,7 +140,7 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				}
+				},"seed": "maintell"
 			}
 		}
 	}, {
@@ -153,7 +165,7 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				}
+				},"seed": "maintell"
 			}
 		}
 	}, {
@@ -178,7 +190,7 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				}
+				},"seed": "maintell"
 			}
 		}
 	}, {
