@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.6"
+sh_ver="1.3.7"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -61,7 +61,7 @@ installv2(){
 	# mkdir /root/v2
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
-	bash <(curl -L -s https://install.direct/go.sh)
+	bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
 	echo -e "${Info} v2配置中..."
