@@ -65,7 +65,7 @@ installv2(){
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
 	echo -e "${Info} v2配置中..."
-	wget -P /etc/v2ray -N --no-check-certificate http://${github}/v2/config.json
+	wget -P /usr/local/etc/v2ray/ -N --no-check-certificate http://${github}/v2/config.json
 	echo -e "${Info} v2服务使能..."
 	systemctl enable v2ray
 	echo -e "${Info} 重启v2服务..."
