@@ -64,6 +64,9 @@ installv2(){
 	bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
+	echo -e "${Info} replace new geo database..."
+	wget -O "/usr/local/share/v2ray/geosite.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
+	wget -O "/usr/local/share/v2ray/geoip.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat	
 	echo -e "${Info} v2配置中..."
 	wget -P /usr/local/etc/v2ray/ -N --no-check-certificate http://${github}/v2/config.json
 	echo -e "${Info} v2服务使能..."
