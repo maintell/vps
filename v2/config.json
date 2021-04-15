@@ -247,7 +247,7 @@
 				{
 					"type": "field",
 					"domain": [
-						"geosite:category-ads"
+						"geosite:category-ads-all"
 					],
 					"outboundTag": "blocked"
 				},{
