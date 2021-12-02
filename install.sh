@@ -15,6 +15,9 @@ systemctl disable firewalld
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
+wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64
+chmod +x /root/ntpsync_linux_x64
+echo "0 * * * * /root/ntpsync_linux_x64 2>&1 &" >> /var/spool/cron/root
 
 #安装nginx
 installnginx(){
