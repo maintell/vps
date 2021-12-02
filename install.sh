@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.9"
+sh_ver="1.3.10"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -465,7 +465,6 @@ case "$num" in
 	;;
 	15)	
 	installv2
-	check_sys_Lotsever
 	installudp2raw
 	installnginx
 	;;
