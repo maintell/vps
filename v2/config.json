@@ -14,9 +14,6 @@
 				"alterId": 100
 			}]
 		},
-		"detour": {
-			"to": "vmess-detour-tcp"
-		},
 		"sniffing": {
 			"enabled": true,
 			"destOverride": ["http", "tls"]
@@ -27,70 +24,6 @@
 		"settings": {}
 	},
 	"inboundDetour": [{
-		"protocol": "vmess",
-		"port": "2000-57000",
-		"tag": "vmess-detour-tcp",
-		"settings": {},
-		"allocate": {
-			"strategy": "random",
-			"concurrency": 30,
-			"refresh": 60
-		}
-	}, {
-		"protocol": "vmess",
-		"port": "20000-65500",
-		"tag": "vmess-detour-12468",
-		"settings": {},
-		"allocate": {
-			"strategy": "random",
-			"concurrency": 30,
-			"refresh": 60
-		},
-		"streamSettings": {
-			"network": "tcp"
-		}
-	}, {
-		"port": 12468,
-		"protocol": "vmess",
-		"settings": {
-			"clients": [{
-				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
-				"level": 1,
-				"alterId": 100
-			}]
-		},
-		"streamSettings": {
-			"network": "tcp"
-		},
-		"detour": {
-			"to": "vmess-detour-12468"
-		}
-	}, {
-		"protocol": "vmess",
-		"port": "16393-56402",
-		"tag": "vmess-detour-16384",
-		"settings": {},
-		"allocate": {
-			"strategy": "random",
-			"concurrency": 30,
-			"refresh": 60
-		},
-		"streamSettings": {
-			"network": "kcp",
-			"kcpSettings": {
-				"mtu": 1350,
-				"tti": 20,
-				"uplinkCapacity": 1000,
-				"downlinkCapacity": 1000,
-				"congestion": false,
-				"readBufferSize": 2,
-				"writeBufferSize": 2,
-				"header": {
-					"type": "none"
-				},"seed": "maintell"
-			}
-		}
-	}, {
 		"port": 16384,
 		"protocol": "vmess",
 		"settings": {
@@ -114,9 +47,6 @@
 					"type": "none"
 				},"seed": "maintell"
 			}
-		},
-		"detour": {
-			"to": "vmess-detour-16384"
 		}
 	}, {
 		"port": 53,
@@ -215,7 +145,7 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				}
+				},"seed": "maintell"
 			}
 		}
 	}, {
