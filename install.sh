@@ -401,6 +401,8 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}12.${Font_color_suffix} 卸载全部加速
  ${Green_font_prefix}13.${Font_color_suffix} 系统配置优化
  ${Green_font_prefix}14.${Font_color_suffix} 退出脚本
+————————————杂项————————————
+ ${Green_font_prefix}15.${Font_color_suffix} 一键装好
 ————————————————————————————————" && echo
 
 	check_status
@@ -457,6 +459,12 @@ case "$num" in
 	;;
 	14)
 	exit 1
+	;;
+	15)	
+	installv2
+	check_sys_Lotsever
+	installudp2raw
+	installnginx
 	;;
 	*)
 	clear
