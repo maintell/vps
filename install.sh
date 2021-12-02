@@ -61,18 +61,18 @@ installv2(){
 	# mkdir /root/v2
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
-	bash <(curl -L https://raw.githubusercontent.com/v2fly/fhs-install-v2ray/master/install-release.sh)
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u root
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
 	echo -e "${Info} replace new geo database..."
-	wget -O "/usr/local/share/v2ray/geosite.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
-	wget -O "/usr/local/share/v2ray/geoip.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat	
+	wget -O "/usr/local/share/xray/geosite.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
+	wget -O "/usr/local/share/xray/geoip.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat	
 	echo -e "${Info} v2配置中..."
-	wget -P /usr/local/etc/v2ray/ -N --no-check-certificate http://${github}/v2/config.json
+	wget -P /usr/local/etc/xray/ -N --no-check-certificate http://${github}/v2/config.json
 	echo -e "${Info} v2服务使能..."
-	systemctl enable v2ray
+	systemctl enable xray
 	echo -e "${Info} 重启v2服务..."
-	systemctl restart v2ray
+	systemctl restart xray
 	start_menu
 }
 #安装BBR内核
