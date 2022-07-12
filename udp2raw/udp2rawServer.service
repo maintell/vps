@@ -3,13 +3,14 @@ Description=udp2raw service
 After=syslog.target network.target auditd.service
 
 [Service]
-Type=notify
-NotifyAccess=all
 User=root
-ExecStart=/usr/local/bin/udp2raw_amd64 -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell -a
-ExecReload=/bin/kill -HUP
-ExecStop=/bin/kill -s QUIT PrivateTmp=true
+Type=simple
+PermissionsStartOnly=true
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+ExecStart=/root/udp/udp2raw_amd64  -s -l 0.0.0.0:27015 -r 127.0.0.1:27010 -k maintell -a
 Restart=always
+RestartSec=30
+StartLimitBurst=10
 
 [Install]
 WantedBy=multi-user.target
