@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.10"
+sh_ver="1.3.11"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -49,13 +49,14 @@ installudp2raw(){
 	mkdir /root/udp		
 	echo -e "${Info} 下载udp2raw必要的文件..."
 	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64
+	wget -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64 -O /usr/local/bin/udp2raw_amd64
+	wget -N --no-check-certificate http://${github}/udp2raw/udp2rawServer.service -O /etc/systemd/system/udp2rawServer.service
 	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh
 	chmod +x /root/udp/udp2raw_amd64
 	chmod +x /root/udp/start.sh	
-	echo -e "${Info} udp2raw加入定时任务..."
-	echo "* * * * * /root/udp/start.sh 2>&1 &" >> /var/spool/cron/root
-	echo -e "${Info} 重启定时任务..."
-	systemctl restart crond
+	chmod +x /usr/local/bin/udp2raw_amd64
+	systemctl enable udp2rawServer
+	systemctl start udp2rawServer
 	start_menu
 }
 #安装v2
