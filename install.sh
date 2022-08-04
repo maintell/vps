@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.11"
+sh_ver="1.3.12"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -59,6 +59,20 @@ installudp2raw(){
 	systemctl start udp2rawServer
 	start_menu
 }
+
+#安装rabbit
+installrabbit(){
+	echo -e "${Info} 开始安装rabbit tcp..."
+	mkdir /root/udp		
+	echo -e "${Info} 下载rabbit tcp必要的文件..."
+	wget -N --no-check-certificate http://${github}/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
+	wget -N --no-check-certificate http://${github}/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
+	chmod +x /usr/local/bin/rabbit-linux-amd64
+	systemctl enable rabbit.service
+	systemctl start rabbit.service	
+	start_menu
+}
+
 #安装v2
 installv2(){	
 	echo -e "${Info} 安装脚本执行中..."
@@ -392,21 +406,23 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}1.${Font_color_suffix} 安装 BBR/BBR魔改版内核
  ${Green_font_prefix}2.${Font_color_suffix} 安装 BBRplus版内核 
  ${Green_font_prefix}3.${Font_color_suffix} 安装 Lotserver(锐速)内核
- ${Green_font_prefix}4.${Font_color_suffix} 安装 v2
- ${Green_font_prefix}5.${Font_color_suffix} 安装 udp2raw
- ${Green_font_prefix}6.${Font_color_suffix} 安装 nginx 并配置好假网站
+————————————应用———————
+ ${Green_font_prefix}5.${Font_color_suffix} 安装 v2
+ ${Green_font_prefix}6.${Font_color_suffix} 安装 udp2raw
+ ${Green_font_prefix}7.${Font_color_suffix} 安装 rabbit tcp
+ ${Green_font_prefix}8.${Font_color_suffix} 安装 nginx 并配置好假网站
 ————————————加速————————————
- ${Green_font_prefix}7.${Font_color_suffix} 使用BBR加速
- ${Green_font_prefix}8.${Font_color_suffix} 使用BBR魔改版加速
- ${Green_font_prefix}9.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
- ${Green_font_prefix}10.${Font_color_suffix} 使用BBRplus版加速
- ${Green_font_prefix}11.${Font_color_suffix} 使用Lotserver(锐速)加速
+ ${Green_font_prefix}10.${Font_color_suffix} 使用BBR加速
+ ${Green_font_prefix}11.${Font_color_suffix} 使用BBR魔改版加速
+ ${Green_font_prefix}12.${Font_color_suffix} 使用暴力BBR魔改版加速(不支持部分系统)
+ ${Green_font_prefix}13.${Font_color_suffix} 使用BBRplus版加速
+ ${Green_font_prefix}14.${Font_color_suffix} 使用Lotserver(锐速)加速
 ————————————杂项————————————
- ${Green_font_prefix}12.${Font_color_suffix} 卸载全部加速
- ${Green_font_prefix}13.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}14.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}15.${Font_color_suffix} 卸载全部加速
+ ${Green_font_prefix}16.${Font_color_suffix} 系统配置优化
+ ${Green_font_prefix}17.${Font_color_suffix} 退出脚本
 ————————————杂项————————————
- ${Green_font_prefix}15.${Font_color_suffix} 一键装好
+ ${Green_font_prefix}18.${Font_color_suffix} 一键装好4应用
 ————————————————————————————————" && echo
 
 	check_status
@@ -431,42 +447,46 @@ case "$num" in
 	3)
 	check_sys_Lotsever
 	;;
-	4)
-	installv2
-	;;
 	5)
-	installudp2raw
+	installv2
 	;;
 	6)
-	installnginx
+	installudp2raw
 	;;
 	7)
-	startbbr
+	installrabbit
 	;;
 	8)
-	startbbrmod
-	;;
-	9)
-	startbbrmod_nanqinlang
+	installnginx
 	;;
 	10)
-	startbbrplus
+	startbbr
 	;;
 	11)
-	startlotserver
+	startbbrmod
 	;;
 	12)
-	remove_all
+	startbbrmod_nanqinlang
 	;;
 	13)
-	optimizing_system
+	startbbrplus
 	;;
 	14)
+	startlotserver
+	;;
+	15)
+	remove_all
+	;;
+	16)
+	optimizing_system
+	;;
+	17)
 	exit 1
 	;;
-	15)	
+	18)	
 	installv2
 	installudp2raw
+	installrabbit
 	installnginx
 	;;
 	*)
