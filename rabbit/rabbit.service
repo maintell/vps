@@ -1,0 +1,16 @@
+[Unit]
+Description=rabbit service
+After=syslog.target network.target auditd.service
+
+[Service]
+User=root
+Type=simple
+PermissionsStartOnly=true
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+ExecStart=/usr/local/bin/rabbit-linux-amd64 -password maintell -rabbit-addr 0.0.0.0:1433 -mode s -verbose 0
+Restart=always
+RestartSec=5
+StartLimitInterval=0
+
+[Install]
+WantedBy=multi-user.target
