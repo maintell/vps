@@ -24,31 +24,6 @@
 		"settings": {}
 	},
 	"inboundDetour": [{
-		"port": 16384,
-		"protocol": "vmess",
-		"settings": {
-			"clients": [{
-				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
-				"level": 1,
-				"alterId": 100
-			}]
-		},
-		"streamSettings": {
-			"network": "kcp",
-			"kcpSettings": {
-				"mtu": 1350,
-				"tti": 20,
-				"uplinkCapacity": 1000,
-				"downlinkCapacity": 1000,
-				"congestion": false,
-				"readBufferSize": 2,
-				"writeBufferSize": 2,
-				"header": {
-					"type": "none"
-				},"seed": "maintell"
-			}
-		}
-	}, {
 		"port": 53,
 		"protocol": "vmess",
 		"settings": {
@@ -75,6 +50,81 @@
 		}
 	}, {
 		"port": 123,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				},"seed": "maintell"
+			}
+		}
+	},{
+		"port": 143,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				},"seed": "maintell"
+			}
+		}
+	},{
+		"port": 220,
+		"protocol": "vmess",
+		"settings": {
+			"clients": [{
+				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
+				"level": 1,
+				"alterId": 100
+			}]
+		},
+		"streamSettings": {
+			"network": "kcp",
+			"kcpSettings": {
+				"mtu": 1350,
+				"tti": 20,
+				"uplinkCapacity": 1000,
+				"downlinkCapacity": 1000,
+				"congestion": false,
+				"readBufferSize": 2,
+				"writeBufferSize": 2,
+				"header": {
+					"type": "none"
+				},"seed": "maintell"
+			}
+		}
+	}, {
+		"port": 1099,
 		"protocol": "vmess",
 		"settings": {
 			"clients": [{
