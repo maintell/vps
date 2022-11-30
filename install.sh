@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.12"
+sh_ver="1.3.13"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -43,6 +43,21 @@ installnginx(){
 	systemctl restart nginx
 	start_menu
 }
+
+
+#安装udpmask
+installudpmask(){
+	echo -e "${Info} 开始安装udpmask..."
+	mkdir /root/udp		
+	echo -e "${Info} 下载udpmask必要的文件..."
+	wget -N --no-check-certificate http://${github}/udpmask/udpmask -O /usr/local/bin/udpmask
+	wget -N --no-check-certificate http://${github}/udpmask/udpmaskServer.service -O /etc/systemd/system/udpmaskServer.service	
+	chmod +x /usr/local/bin/udpmask
+	systemctl enable udpmaskServer
+	systemctl start udpmaskServer
+	start_menu
+}
+
 #安装udp2raw
 installudp2raw(){
 	echo -e "${Info} 开始安装udp2raw..."
@@ -409,8 +424,9 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
 ————————————应用———————
  ${Green_font_prefix}5.${Font_color_suffix} 安装 v2
  ${Green_font_prefix}6.${Font_color_suffix} 安装 udp2raw
- ${Green_font_prefix}7.${Font_color_suffix} 安装 rabbit tcp
- ${Green_font_prefix}8.${Font_color_suffix} 安装 nginx 并配置好假网站
+ ${Green_font_prefix}7.${Font_color_suffix} 安装 udpmask
+ ${Green_font_prefix}8.${Font_color_suffix} 安装 rabbit tcp
+ ${Green_font_prefix}9.${Font_color_suffix} 安装 nginx 并配置好假网站
 ————————————加速————————————
  ${Green_font_prefix}10.${Font_color_suffix} 使用BBR加速
  ${Green_font_prefix}11.${Font_color_suffix} 使用BBR魔改版加速
@@ -454,9 +470,12 @@ case "$num" in
 	installudp2raw
 	;;
 	7)
-	installrabbit
+	installudpmask
 	;;
 	8)
+	installrabbit
+	;;
+	9)
 	installnginx
 	;;
 	10)
