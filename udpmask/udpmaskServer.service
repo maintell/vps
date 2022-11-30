@@ -1,0 +1,16 @@
+[Unit]
+Description=udpmask service
+After=syslog.target network.target auditd.service
+
+[Service]
+User=root
+Type=simple
+PermissionsStartOnly=true
+CapabilityBoundingSet=CAP_NET_RAW CAP_NET_ADMIN
+ExecStart=/usr/local/bin/udpmask -m server -c 127.0.0.1 -o 5060 -p 992 -t 5
+Restart=always
+RestartSec=30
+StartLimitBurst=10
+
+[Install]
+WantedBy=multi-user.target
