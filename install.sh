@@ -51,10 +51,8 @@ installudpmask(){
 	mkdir /root/udp		
 	echo -e "${Info} 下载udpmask必要的文件..."
 	wget -N --no-check-certificate http://${github}/udpmask/udpmask -O /usr/local/bin/udpmask
-	wget -N --no-check-certificate http://${github}/udpmask/udpmaskServer.service -O /etc/systemd/system/udpmaskServer.service	
 	chmod +x /usr/local/bin/udpmask
-	systemctl enable udpmaskServer
-	systemctl start udpmaskServer
+	echo "* * * * * /usr/local/bin/udpmask -m server -c 127.0.0.1 -o 5060 -p 992 -t 5 -d" >> /var/spool/cron/root
 	start_menu
 }
 
