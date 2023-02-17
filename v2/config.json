@@ -5,25 +5,6 @@
 		"loglevel": "warning"
 	},
 	"inbound": {
-		"port": 3306,
-		"protocol": "vmess",
-		"settings": {
-			"clients": [{
-				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
-				"level": 1,
-				"alterId": 100
-			}]
-		},
-		"sniffing": {
-			"enabled": true,
-			"destOverride": ["http", "tls"]
-		}
-	},
-	"outbound": {
-		"protocol": "freedom",
-		"settings": {}
-	},
-	"inboundDetour": [{
 		"port": 53,
 		"protocol": "vmess",
 		"settings": {
@@ -48,14 +29,19 @@
 				},"seed": "maintell"
 			}
 		}
-	}, {
+	}, 
+	"outbound": {
+		"protocol": "freedom",
+		"settings": {}
+	},
+	"inboundDetour": [{
 		"port": 123,
 		"protocol": "vmess",
 		"settings": {
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -80,7 +66,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -105,7 +91,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -130,7 +116,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -155,7 +141,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -180,7 +166,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
@@ -205,7 +191,7 @@
 			"clients": [{
 				"id": "bb102209-6292-9dd3-573c-c32970a3a585",
 				"level": 1,
-				"alterId": 100
+				"alterId": 0
 			}]
 		},
 		"streamSettings": {
