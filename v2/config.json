@@ -245,13 +245,7 @@
 		"protocol": "blackhole",
 		"settings": {},
 		"tag": "blocked"
-	}],
-	"inboundDetour": [],
-	"outboundDetour": [{
-		"protocol": "blackhole",
-		"settings": {},
-		"tag": "blocked"
-	}],
+	}],	
 	"routing": {
 		"strategy": "rules",
 		"settings": {
