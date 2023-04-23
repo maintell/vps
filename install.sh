@@ -92,7 +92,7 @@ installv2(){
 	# mkdir /root/v2
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
-	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u root
+	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u root --version 1.8.1
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
 	echo -e "${Info} replace new geo database..."
