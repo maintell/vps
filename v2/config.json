@@ -4,7 +4,42 @@
 		"error": "/var/log/xray/error.log",
 		"loglevel": "warning"
 	},
-	"inbound": {
+	"inbounds": [{
+                "listen": "0.0.0.0",
+                "port": 2083,
+                "protocol": "vless",
+                "settings": {
+                        "clients": [{
+                                "id": "bb102209-6292-9dd3-573c-c32970a3a585",
+                                "flow": "xtls-rprx-vision"
+                        }],
+                        "decryption": "none"
+                },
+                "streamSettings": {
+                        "network": "tcp",
+                        "security": "reality",
+                        "realitySettings": {
+                                "show": false,
+                                "dest": "www.oracle.com:443",
+                                "xver": 0,
+                                "serverNames": [
+                                        "www.oracle.com",
+                                        "download.oracle.com"
+                                ],
+                                "privateKey": "eOAUGVO9DPaQPdH0dhJHQSvxGTaJ7cumgN0f45j2lmg",
+                                "shortIds": [
+                                        ""
+                                ]
+                        }
+                },
+                "sniffing": {
+                        "enabled": true,
+                        "destOverride": [
+                                "http",
+                                "tls"
+                        ]
+                }
+        },{
 		"port": 53,
 		"protocol": "vmess",
 		"settings": {
@@ -26,15 +61,11 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
-	}, 
-	"outbound": {
-		"protocol": "freedom",
-		"settings": {}
-	},
-	"inboundDetour": [{
+	},{
 		"port": 123,
 		"protocol": "vmess",
 		"settings": {
@@ -56,10 +87,11 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
-	},{
+	}, {
 		"port": 143,
 		"protocol": "vmess",
 		"settings": {
@@ -81,10 +113,11 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
-	},{
+	}, {
 		"port": 220,
 		"protocol": "vmess",
 		"settings": {
@@ -106,7 +139,8 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
 	}, {
@@ -131,7 +165,8 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
 	}, {
@@ -156,7 +191,8 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
 	}, {
@@ -181,7 +217,8 @@
 				"writeBufferSize": 2,
 				"header": {
 					"type": "none"
-				},"seed": "maintell"
+				},
+				"seed": "maintell"
 			}
 		}
 	}, {
@@ -201,22 +238,30 @@
 			}
 		}
 	}],
+	"outbounds": [{
+		"protocol": "freedom",
+		"settings": {}
+	}, {
+		"protocol": "blackhole",
+		"settings": {},
+		"tag": "blocked"
+	}],
+	"inboundDetour": [],
 	"outboundDetour": [{
-			"protocol": "blackhole",
-			"settings": {},
-			"tag": "blocked"
-		}],
+		"protocol": "blackhole",
+		"settings": {},
+		"tag": "blocked"
+	}],
 	"routing": {
 		"strategy": "rules",
 		"settings": {
-			"rules": [
-				{
-					"type": "field",
-					"domain": [
-						"geosite:category-ads-all"
-					],
-					"outboundTag": "blocked"
-				},{
+			"rules": [{
+				"type": "field",
+				"domain": [
+					"geosite:category-ads-all"
+				],
+				"outboundTag": "blocked"
+			}, {
 				"type": "field",
 				"ip": [
 					"0.0.0.0/8",
