@@ -1,0 +1,21 @@
+{
+  "listen": ":32769",
+  "protocol": "faketcp",
+  "cert": "/etc/nginx/cert.crt",
+  "key": "/etc/nginx/cert.key",
+  "up_mbps": 1000,
+  "down_mbps": 1000,
+  "disable_udp": false, 
+  "obfs": "colQlZcxxwvm0NUbvOfqw_Gi6Cw6xwjnvtdlyZwuQSc", 
+  "auth": { 
+    "mode": "passwords", 
+    "config": ["maintell", "951236"]
+  },
+  "alpn": "download.oracle.com",
+  "recv_window_conn": 134217728,
+  "recv_window_client": 134217728,
+  "max_conn_client": 8192,
+  "disable_mtu_discovery": false,
+  "resolver": "udp://1.1.1.1:53",
+  "resolve_preference": "4"
+}
