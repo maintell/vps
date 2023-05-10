@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.17"
+sh_ver="1.3.18"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -83,6 +83,24 @@ installrabbit(){
 	chmod +x /usr/local/bin/rabbit-linux-amd64
 	systemctl enable rabbit.service
 	systemctl start rabbit.service	
+	start_menu
+}
+
+
+#安装Hysteria
+installhy(){	
+	echo -e "${Info} hysteria安装脚本执行中..."
+	wget -N --no-check-certificate https://github.com/apernet/hysteria/releases/download/v1.3.4/hysteria-linux-amd64 -O /usr/local/bin/hysteria
+	chmod +x /usr/local/bin/hysteria
+	wget -N --no-check-certificate http://${github}/hysteria/configUDP.json -O /usr/local/etc/hysteria/configUDP.json
+	wget -N --no-check-certificate http://${github}/hysteria/configFakeTcp.json -O /usr/local/etc/hysteria/configFakeTcp.json
+	wget -N --no-check-certificate http://${github}/hysteria/HyUDP.service -O /etc/systemd/system/HyUDP.service
+	wget -N --no-check-certificate http://${github}/hysteria/hyFakeTcp.service -O /etc/systemd/system/hyFakeTcp.service	
+	echo -e "${Info}  hysteria服务使能..."
+	systemctl enable HyUDP.service
+	systemctl start  HyUDP.service
+	systemctl enable hyFakeTcp.service
+	systemctl start  hyFakeTcp.service
 	start_menu
 }
 
@@ -420,6 +438,7 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}2.${Font_color_suffix} 安装 BBRplus版内核 
  ${Green_font_prefix}3.${Font_color_suffix} 安装 Lotserver(锐速)内核
 ————————————应用———————
+ ${Green_font_prefix}4.${Font_color_suffix} 安装 hysteria
  ${Green_font_prefix}5.${Font_color_suffix} 安装 v2
  ${Green_font_prefix}6.${Font_color_suffix} 安装 udp2raw
  ${Green_font_prefix}7.${Font_color_suffix} 安装 udpmask
@@ -434,9 +453,9 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
 ————————————杂项————————————
  ${Green_font_prefix}15.${Font_color_suffix} 卸载全部加速
  ${Green_font_prefix}16.${Font_color_suffix} 系统配置优化
- ${Green_font_prefix}17.${Font_color_suffix} 退出脚本
+ ${Green_font_prefix}20.${Font_color_suffix} 退出脚本
 ————————————杂项————————————
- ${Green_font_prefix}18.${Font_color_suffix} 一键装好4应用
+ ${Green_font_prefix}19.${Font_color_suffix} 一键装好4应用
 ————————————————————————————————" && echo
 
 	check_status
@@ -460,6 +479,9 @@ case "$num" in
 	;;
 	3)
 	check_sys_Lotsever
+	;;
+	4)
+	installhy
 	;;
 	5)
 	installv2
@@ -497,10 +519,10 @@ case "$num" in
 	16)
 	optimizing_system
 	;;
-	17)
+	20)
 	exit 1
 	;;
-	18)	
+	19)	
 	installv2
 	installudp2raw
 	installrabbit
