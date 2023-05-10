@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.18"
+sh_ver="1.3.19"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -92,9 +92,10 @@ installhy(){
 	echo -e "${Info} hysteria安装脚本执行中..."
 	wget -N --no-check-certificate https://github.com/apernet/hysteria/releases/download/v1.3.4/hysteria-linux-amd64 -O /usr/local/bin/hysteria
 	chmod +x /usr/local/bin/hysteria
+	mkdir /usr/local/etc/hysteria
 	wget -N --no-check-certificate http://${github}/hysteria/configUDP.json -O /usr/local/etc/hysteria/configUDP.json
 	wget -N --no-check-certificate http://${github}/hysteria/configFakeTcp.json -O /usr/local/etc/hysteria/configFakeTcp.json
-	wget -N --no-check-certificate http://${github}/hysteria/HyUDP.service -O /etc/systemd/system/HyUDP.service
+	wget -N --no-check-certificate http://${github}/hysteria/HyUDP.service -O /etc/systemd/system/hyUDP.service
 	wget -N --no-check-certificate http://${github}/hysteria/hyFakeTcp.service -O /etc/systemd/system/hyFakeTcp.service	
 	echo -e "${Info}  hysteria服务使能..."
 	systemctl enable HyUDP.service
