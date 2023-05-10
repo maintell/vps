@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.19"
+sh_ver="1.3.20"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -95,11 +95,11 @@ installhy(){
 	mkdir /usr/local/etc/hysteria
 	wget -N --no-check-certificate http://${github}/hysteria/configUDP.json -O /usr/local/etc/hysteria/configUDP.json
 	wget -N --no-check-certificate http://${github}/hysteria/configFakeTcp.json -O /usr/local/etc/hysteria/configFakeTcp.json
-	wget -N --no-check-certificate http://${github}/hysteria/HyUDP.service -O /etc/systemd/system/hyUDP.service
+	wget -N --no-check-certificate http://${github}/hysteria/hyUDP.service -O /etc/systemd/system/hyUDP.service
 	wget -N --no-check-certificate http://${github}/hysteria/hyFakeTcp.service -O /etc/systemd/system/hyFakeTcp.service	
 	echo -e "${Info}  hysteria服务使能..."
-	systemctl enable HyUDP.service
-	systemctl start  HyUDP.service
+	systemctl enable hyUDP.service
+	systemctl start  hyUDP.service
 	systemctl enable hyFakeTcp.service
 	systemctl start  hyFakeTcp.service
 	start_menu
