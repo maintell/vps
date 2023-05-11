@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.20"
+sh_ver="1.3.21"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -88,7 +88,14 @@ installrabbit(){
 
 
 #安装Hysteria
-installhy(){	
+installhy(){
+        echo -e "${Info} hysteria正在生成证书中..."
+        mkdir /etc/nginx
+	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
+	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
+	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
+	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
+	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
 	echo -e "${Info} hysteria安装脚本执行中..."
 	wget -N --no-check-certificate https://github.com/apernet/hysteria/releases/download/v1.3.4/hysteria-linux-amd64 -O /usr/local/bin/hysteria
 	chmod +x /usr/local/bin/hysteria
