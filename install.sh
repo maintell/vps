@@ -93,7 +93,7 @@ installhy(){
         mkdir /etc/nginx
 	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
 	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
-	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
+	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key -f
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
 	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
 	echo -e "${Info} hysteria安装脚本执行中..."
@@ -105,6 +105,9 @@ installhy(){
 	wget -N --no-check-certificate http://${github}/hysteria/hyUDP.service -O /etc/systemd/system/hyUDP.service
 	wget -N --no-check-certificate http://${github}/hysteria/hyFakeTcp.service -O /etc/systemd/system/hyFakeTcp.service	
 	echo -e "${Info}  hysteria服务使能..."
+	sysctl -w net.core.rmem_max=16777216
+        sysctl -w net.core.wmem_max=16777216
+	sysctl -p
 	systemctl enable hyUDP.service
 	systemctl start  hyUDP.service
 	systemctl enable hyFakeTcp.service
