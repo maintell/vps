@@ -2,7 +2,7 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.21"
+sh_ver="1.3.22"
 github="raw.githubusercontent.com/maintell/vps/master"
 
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
@@ -86,6 +86,23 @@ installrabbit(){
 	start_menu
 }
 
+#安装tuic
+installtuic(){
+	echo -e "${Info} tuic安装脚本执行中..."
+	wget -N --no-check-certificate https://github.com/EAimTY/tuic/releases/download/tuic-server-1.0.0/tuic-server-1.0.0-x86_64-unknown-linux-musl -O /usr/local/bin/tuic
+	chmod +x /usr/local/bin/tuic
+	mkdir /usr/local/etc/tuic
+	wget -N --no-check-certificate http://${github}/tuic/config.json -O /usr/local/etc/tuic/config.json
+	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem
+	wget -N --no-check-certificate http://${github}/tuic/cert.der -O /usr/local/etc/tuic/cert.der
+	wget -N --no-check-certificate http://${github}/tuic/key.pem -O /usr/local/etc/tuic/key.pem
+	wget -N --no-check-certificate http://${github}/tuic/key.der -O /usr/local/etc/tuic/key.der
+	wget -N --no-check-certificate http://${github}/tuic/tuic.service -O /etc/systemd/system/tuic.service	
+	echo -e "${Info}  tuic服务使能..."	
+	systemctl enable tuic.service
+	systemctl start  tuic.service
+	start_menu
+}
 
 #安装Hysteria
 installhy(){
@@ -453,7 +470,7 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}5.${Font_color_suffix} 安装 v2
  ${Green_font_prefix}6.${Font_color_suffix} 安装 udp2raw
  ${Green_font_prefix}7.${Font_color_suffix} 安装 udpmask
- ${Green_font_prefix}8.${Font_color_suffix} 安装 rabbit tcp
+ ${Green_font_prefix}8.${Font_color_suffix} 安装 tuic
  ${Green_font_prefix}9.${Font_color_suffix} 安装 nginx 并配置好假网站
 ————————————加速————————————
  ${Green_font_prefix}10.${Font_color_suffix} 使用BBR加速
@@ -504,7 +521,7 @@ case "$num" in
 	installudpmask
 	;;
 	8)
-	installrabbit
+	installtuic
 	;;
 	9)
 	installnginx
