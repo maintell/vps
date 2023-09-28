@@ -1,7 +1,7 @@
 listen: :2053
 
 tls:
-  cert: /etc/hysteria/server.crt 
+  cert: /etc/hysteria/server.crt
   key: /etc/hysteria/server.key
 
 auth:
@@ -19,5 +19,5 @@ masquerade:
   proxy:
     url: https://bing.com
     rewriteHost: true
-  listenHTTPS: :2053 
+  listenHTTPS: :2053
   forceHTTPS: true
