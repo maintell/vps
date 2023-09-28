@@ -8,14 +8,14 @@ github="raw.githubusercontent.com/maintell/vps/master"
 Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
-Tip="${Green_font_prefix}[注意]${Font_color_suffix}"
+Tip="${Green_font_prefix}[注意]${Font_color_suffix}" 
 
 systemctl stop firewalld
 systemctl disable firewalld
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
-wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64
+wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64 
 chmod +x /root/ntpsync_linux_x64
 echo "0 * * * * /root/ntpsync_linux_x64 2>&1 &" >> /var/spool/cron/root
 
@@ -28,8 +28,8 @@ installnginx(){
 	echo -e "${Info} nginx服务使能..."
 	systemctl enable nginx	
 	echo -e "${Info} nginx服务ssl自签名证书生成..."
-	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
-	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
+	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024 
+	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr 
 	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
 	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
@@ -58,18 +58,18 @@ installudpmask(){
 
 #安装udp2raw
 installudp2raw(){
-	echo -e "${Info} 开始安装udp2raw..."
-	mkdir /root/udp		
+	echo -e "${Info} 开始安装udp2raw..." 
+	mkdir /root/udp		 
 	echo -e "${Info} 下载udp2raw必要的文件..."
-	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64
+	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64 
 	wget -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64 -O /usr/local/bin/udp2raw_amd64
-	wget -N --no-check-certificate http://${github}/udp2raw/udp2rawServer.service -O /etc/systemd/system/udp2rawServer.service
-	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh
+	wget -N --no-check-certificate http://${github}/udp2raw/udp2rawServer.service -O /etc/systemd/system/udp2rawServer.service 
+	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh 
 	chmod +x /root/udp/udp2raw_amd64
 	chmod +x /root/udp/start.sh	
 	chmod +x /usr/local/bin/udp2raw_amd64
 	systemctl enable udp2rawServer
-	systemctl start udp2rawServer
+	systemctl start udp2rawServer 
 	start_menu
 }
 
@@ -80,7 +80,7 @@ installrabbit(){
 	echo -e "${Info} 下载rabbit tcp必要的文件..."
 	wget -N --no-check-certificate http://${github}/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
 	wget -N --no-check-certificate http://${github}/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
-	chmod +x /usr/local/bin/rabbit-linux-amd64
+	chmod +x /usr/local/bin/rabbit-linux-amd64 
 	systemctl enable rabbit.service
 	systemctl start rabbit.service	
 	start_menu
@@ -89,46 +89,34 @@ installrabbit(){
 #安装tuic
 installtuic(){
 	echo -e "${Info} tuic安装脚本执行中..."
-	wget -N --no-check-certificate https://github.com/EAimTY/tuic/releases/download/tuic-server-1.0.0/tuic-server-1.0.0-x86_64-unknown-linux-musl -O /usr/local/bin/tuic
+	wget -N --no-check-certificate https://github.com/EAimTY/tuic/releases/download/tuic-server-1.0.0/tuic-server-1.0.0-x86_64-unknown-linux-musl -O /usr/local/bin/tuic 
 	chmod +x /usr/local/bin/tuic
 	mkdir /usr/local/etc/tuic
-	wget -N --no-check-certificate http://${github}/tuic/config.json -O /usr/local/etc/tuic/config.json
-	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem
+	wget -N --no-check-certificate http://${github}/tuic/config.json -O /usr/local/etc/tuic/config.json 
+	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem 
 	wget -N --no-check-certificate http://${github}/tuic/cert.der -O /usr/local/etc/tuic/cert.der
-	wget -N --no-check-certificate http://${github}/tuic/key.pem -O /usr/local/etc/tuic/key.pem
+	wget -N --no-check-certificate http://${github}/tuic/key.pem -O /usr/local/etc/tuic/key.pem 
 	wget -N --no-check-certificate http://${github}/tuic/key.der -O /usr/local/etc/tuic/key.der
-	wget -N --no-check-certificate http://${github}/tuic/tuic.service -O /etc/systemd/system/tuic.service	
+	wget -N --no-check-certificate http://${github}/tuic/tuic.service -O /etc/systemd/system/tuic.service	  
 	echo -e "${Info}  tuic服务使能..."	
 	systemctl enable tuic.service
-	systemctl start  tuic.service
+	systemctl start  tuic.service 
 	start_menu
 }
 
 #安装Hysteria
 installhy(){
+	echo -e "${Info} hysteria安装脚本执行中..." 
+	bash <(curl -fsSL https://get.hy2.sh/) 
         echo -e "${Info} hysteria正在生成证书中..."
-        mkdir /etc/nginx
-	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
-	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
-	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key -f
-	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
-	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
-	echo -e "${Info} hysteria安装脚本执行中..."
-	wget -N --no-check-certificate https://github.com/apernet/hysteria/releases/download/v1.3.4/hysteria-linux-amd64 -O /usr/local/bin/hysteria
-	chmod +x /usr/local/bin/hysteria
-	mkdir /usr/local/etc/hysteria
-	wget -N --no-check-certificate http://${github}/hysteria/configUDP.json -O /usr/local/etc/hysteria/configUDP.json
-	wget -N --no-check-certificate http://${github}/hysteria/configFakeTcp.json -O /usr/local/etc/hysteria/configFakeTcp.json
-	wget -N --no-check-certificate http://${github}/hysteria/hyUDP.service -O /etc/systemd/system/hyUDP.service
-	wget -N --no-check-certificate http://${github}/hysteria/hyFakeTcp.service -O /etc/systemd/system/hyFakeTcp.service	
-	echo -e "${Info}  hysteria服务使能..."
+        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria/server.key -out /etc/hysteria/server.crt -subj "/CN=bing.com" -days 36500 && sudo chown hysteria /etc/hysteria/server.key && sudo chown hysteria /etc/hysteria/server.crt  
+	echo -e "${Info}  hysteria服务使能..."  
+      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml
 	sysctl -w net.core.rmem_max=16777216
-        sysctl -w net.core.wmem_max=16777216
+        sysctl -w net.core.wmem_max=16777216 
 	sysctl -p
-	systemctl enable hyUDP.service
-	systemctl start  hyUDP.service
-	systemctl enable hyFakeTcp.service
-	systemctl start  hyFakeTcp.service
+	systemctl enable hysteria-server.service 
+	systemctl start  hysteria-server.service
 	start_menu
 }
 
