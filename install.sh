@@ -107,13 +107,16 @@ installtuic(){
 #安装Hysteria
 installhy(){
 	echo -e "${Info} hysteria安装脚本执行中..." 
+ 	mkdir /etc/hysteria/ 
 	bash <(curl -fsSL https://get.hy2.sh/) 
         echo -e "${Info} hysteria正在生成证书中..."
-        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria/server.key -out /etc/hysteria/server.crt -subj "/CN=bing.com" -days 36500 && sudo chown hysteria /etc/hysteria/server.key && sudo chown hysteria /etc/hysteria/server.crt  
-	echo -e "${Info}  hysteria服务使能..."  
-      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml
+        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria/server.key -out /etc/hysteria/server.crt -subj "/CN=bing.com" -days 36500 
+	chown hysteria /etc/hysteria/server.key
+        chown hysteria /etc/hysteria/server.crt
+	echo -e "${Info}  hysteria服务使能..."
+      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml 
 	sysctl -w net.core.rmem_max=16777216
-        sysctl -w net.core.wmem_max=16777216 
+        sysctl -w net.core.wmem_max=16777216
 	sysctl -p
 	systemctl enable hysteria-server.service 
 	systemctl start  hysteria-server.service
@@ -125,7 +128,7 @@ installv2(){
 	echo -e "${Info} 安装脚本执行中..."
 	# mkdir /root/v2
 	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/install-release.sh	
-	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip
+	# wget -P /root/v2 -N --no-check-certificate http://${github}/v2/v2.4.22.1.zip 
 	bash -c "$(curl -L https://github.com/XTLS/Xray-install/raw/main/install-release.sh)" @ install -u root --version 1.8.1
 	# chmod +x /root/v2/install-release.sh
 	# /root/v2/install-release.sh --local /root/v2/v2.4.22.1.zip
