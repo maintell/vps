@@ -2,10 +2,10 @@
 PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
 export PATH
 
-sh_ver="1.3.25" 
+sh_ver="1.3.26"  
 github="raw.githubusercontent.com/maintell/vps/master"
 
-Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"
+Green_font_prefix="\033[32m" && Red_font_prefix="\033[31m" && Green_background_prefix="\033[42;37m" && Red_background_prefix="\033[41;37m" && Font_color_suffix="\033[0m"  
 Info="${Green_font_prefix}[信息]${Font_color_suffix}"
 Error="${Red_font_prefix}[错误]${Font_color_suffix}"
 Tip="${Green_font_prefix}[注意]${Font_color_suffix}" 
@@ -32,12 +32,12 @@ installnginx(){
 	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr 
 	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
-	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	
+	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt	 
 	echo -e "${Info} nginx服务配置中..."
 	wget -P /etc/nginx/ -N --no-check-certificate http://${github}/nginx/nginx.conf	
 	echo -e "${Info} 开始初始化网站内容为java帮助文件..."	
 	yum -y install unzip
-	wget -P /usr/share/nginx/html/ -N --no-check-certificate http://${github}/nginx/docs.zip
+	wget -P /usr/share/nginx/html/ -N --no-check-certificate http://${github}/nginx/docs.zip 
 	unzip -o -q /usr/share/nginx/html/docs.zip -d /usr/share/nginx/html/	
 	echo -e "${Info} 重启nginx服务..."
 	systemctl restart nginx
@@ -80,7 +80,7 @@ installrabbit(){
 	echo -e "${Info} 下载rabbit tcp必要的文件..."
 	wget -N --no-check-certificate http://${github}/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
 	wget -N --no-check-certificate http://${github}/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
-	chmod +x /usr/local/bin/rabbit-linux-amd64 
+	chmod +x /usr/local/bin/rabbit-linux-amd64  
 	systemctl enable rabbit.service
 	systemctl start rabbit.service	
 	start_menu
@@ -93,7 +93,7 @@ installtuic(){
 	chmod +x /usr/local/bin/tuic
 	mkdir /usr/local/etc/tuic
 	wget -N --no-check-certificate http://${github}/tuic/config.json -O /usr/local/etc/tuic/config.json 
-	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem 
+	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem  
 	wget -N --no-check-certificate http://${github}/tuic/cert.der -O /usr/local/etc/tuic/cert.der
 	wget -N --no-check-certificate http://${github}/tuic/key.pem -O /usr/local/etc/tuic/key.pem 
 	wget -N --no-check-certificate http://${github}/tuic/key.der -O /usr/local/etc/tuic/key.der
@@ -106,19 +106,19 @@ installtuic(){
 
 #安装Hysteria
 installhy(){
-	echo -e "${Info} hysteria安装脚本执行中..." 
- 	mkdir /etc/hysteria/ 
-	bash <(curl -fsSL https://get.hy2.sh/) 
+	echo -e "${Info} hysteria安装脚本执行中..."
+ 	mkdir /etc/hysteria/
+	bash <(curl -fsSL https://get.hy2.sh/)
         echo -e "${Info} hysteria正在生成证书中..."
-        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria/server.key -out /etc/hysteria/server.crt -subj "/CN=bing.com" -days 36500 
+        openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria/server.key -out /etc/hysteria/server.crt -subj "/CN=bing.com" -days 36500 
 	chown hysteria /etc/hysteria/server.key
         chown hysteria /etc/hysteria/server.crt
 	echo -e "${Info}  hysteria服务使能..."
-      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml 
+      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml
 	sysctl -w net.core.rmem_max=16777216
         sysctl -w net.core.wmem_max=16777216
 	sysctl -p
-	systemctl enable hysteria-server.service 
+	systemctl enable hysteria-server.service
 	systemctl start  hysteria-server.service
 	start_menu
 }
@@ -179,7 +179,7 @@ installbbr(){
 installbbrplus(){
 	kernel_version="4.14.129-bbrplus"
 	if [[ "${release}" == "centos" ]]; then
-		wget -N --no-check-certificate https://${github}/bbrplus/${release}/${version}/kernel-${kernel_version}.rpm
+		wget -N --no-check-certificate https://${github}/bbrplus/${release}/${version}/kernel-${kernel_version}.rpm 
 		yum install -y kernel-${kernel_version}.rpm
 		rm -f kernel-${kernel_version}.rpm
 		kernel_version="4.14.129_bbrplus" #fix a bug
