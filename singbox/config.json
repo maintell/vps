@@ -1,0 +1,46 @@
+{
+	"log": {
+		"level": "info"
+	},
+	"dns": {
+		"servers": [{
+			"address": "tls://8.8.8.8"
+		}]
+	},
+	"inbounds": [{
+		"type": "vmess",
+		"listen": "0.0.0.0",
+		"listen_port": 2066,
+		"users": [{
+			"uuid": "bb102209-6292-9dd3-573c-c32970a3a585",
+			"alterId": 0
+		}],
+		"transport": {
+			"type": "ws",
+			"path": "/ws",
+			"max_early_data": 2048,
+			"early_data_header_name": "Sec-WebSocket-Protocol"
+		},
+		"multiplex": {
+			"enabled": true,
+			"padding": true,
+			"brutal": {
+				"enabled": true,
+				"up_mbps": 1000,
+				"down_mbps": 1000
+			}
+		}
+	}],
+	"outbounds": [{
+		"type": "direct"
+	}, {
+		"type": "dns",
+		"tag": "dns-out"
+	}],
+	"route": {
+		"rules": [{
+			"protocol": "dns",
+			"outbound": "dns-out"
+		}]
+	}
+}
