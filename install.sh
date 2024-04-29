@@ -123,6 +123,35 @@ installhy(){
 	start_menu
 }
 
+startkernal(){	
+	echo -e "${Info} singbox安装脚本执行中..."
+ 	rpm --import https://www.elrepo.org/RPM-GPG-KEY-elrepo.org
+  	yum install -y https://www.elrepo.org/elrepo-release-7.el7.elrepo.noarch.rpm
+   	yum --disablerepo=\* --enablerepo=elrepo-kernel repolist
+   	yum --disablerepo=\* --enablerepo=elrepo-kernel list kernel*
+    	yum remove -y kernel-tools-libs.x86_64 kernel-tools.x86_64
+     	yum --disablerepo=\* --enablerepo=elrepo-kernel install kernel-ml-tools.x86_64 kernel-ml-tools.x86_64 kernel-ml-devel kernel-ml-headers kernel-ml-tools-libs-devel -y
+      	grub2-set-default 0
+       	grub2-editenv list
+	reboot
+}
+
+startsingbox(){	
+	echo -e "${Info} tcpbrutal安装脚本执行中..."
+ 	yum install -y centos-release-scl
+ 	yum install -y devtoolset-9-gcc*
+  	scl enable devtoolset-9 bash
+   	gcc -v
+    	bash <(curl -fsSL https://tcp.hy2.sh/)
+	echo -e "${Info} singbox安装执行中..."
+ 	bash <(curl -fsSL https://sing-box.app/rpm-install.sh)
+	wget -N --no-check-certificate http://${github}/singbox/config.json -O /etc/sing-box/config.json
+  	systemctl enable sing-box
+	systemctl start sing-box
+ 	systemctl status sing-box
+	echo -e "${Info} singbox安装完毕..."     	
+}
+
 #安装v2
 installv2(){	
 	echo -e "${Info} 安装脚本执行中..."
@@ -334,8 +363,8 @@ maxmode=\"1\"">>/appex/etc/config
 remove_all(){
 	rm -rf bbrmod
 	sed -i '/net.core.default_qdisc/d' /etc/sysctl.conf
-    sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-    sed -i '/fs.file-max/d' /etc/sysctl.conf
+ 	sed -i '/net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
+	sed -i '/fs.file-max/d' /etc/sysctl.conf
 	sed -i '/net.core.rmem_max/d' /etc/sysctl.conf
 	sed -i '/net.core.wmem_max/d' /etc/sysctl.conf
 	sed -i '/net.core.rmem_default/d' /etc/sysctl.conf
@@ -458,6 +487,8 @@ echo && echo -e "一键安装脚本 ${Red_font_prefix}[v${sh_ver}]${Font_color_s
  ${Green_font_prefix}7.${Font_color_suffix} 安装 udpmask
  ${Green_font_prefix}8.${Font_color_suffix} 安装 tuic
  ${Green_font_prefix}9.${Font_color_suffix} 安装 nginx 并配置好假网站
+ ${Green_font_prefix}17.${Font_color_suffix} 安装kernal
+ ${Green_font_prefix}18.${Font_color_suffix} 安装singbox
 ————————————加速————————————
  ${Green_font_prefix}10.${Font_color_suffix} 使用BBR加速
  ${Green_font_prefix}11.${Font_color_suffix} 使用BBR魔改版加速
@@ -532,6 +563,12 @@ case "$num" in
 	;;
 	16)
 	optimizing_system
+	;;
+	17)
+	startkernal
+	;;
+	18)
+	startsingbox
 	;;
 	20)
 	exit 1
