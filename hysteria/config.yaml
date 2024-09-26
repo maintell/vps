@@ -20,4 +20,9 @@ masquerade:
     url: https://bing.com
     rewriteHost: true
   listenHTTPS: :2053
-  forceHTTPS: true
+  forceHTTPS: true  
+quic:
+  initStreamReceiveWindow: 53687090
+  maxStreamReceiveWindow: 53687090
+  initConnReceiveWindow: 134217728
+  maxConnReceiveWindow: 134217728
