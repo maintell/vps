@@ -117,7 +117,14 @@ installhy(){
       	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml
 	sysctl -w net.core.rmem_max=16777216
         sysctl -w net.core.wmem_max=16777216
-	sysctl -p
+	sysctl 	sysctl -p
+        mkdir /etc/systemd/system/hysteria-server.service.d/
+	touch /etc/systemd/system/hysteria-server.service.d/priority.conf
+        echo "[Service]" >> /etc/systemd/system/hysteria-server.service.d/priority.conf
+        echo "CPUSchedulingPolicy=rr" >> /etc/systemd/system/hysteria-server.service.d/priority.conf 
+	echo "CPUSchedulingPriority=99" >> /etc/systemd/system/hysteria-server.service.d/priority.conf
+ 	systemctl daemon-reload
+	systemctl restart hysteria-server.service 
 	systemctl enable hysteria-server.service
 	systemctl start  hysteria-server.service
 	start_menu
