@@ -8,6 +8,21 @@
 		}]
 	},
 	"inbounds": [{
+		"type": "shadowsocks",
+		"listen": "::",
+		"listen_port": 2067,
+		"method": "2022-blake3-aes-128-gcm",
+		"password": "c9AM1oorBgwaJuSPWNGAbA==",
+		"multiplex": {
+			"enabled": true,
+			"padding": true,
+			"brutal": {
+				"enabled": true,
+				"up_mbps": 1000,
+				"down_mbps": 1000
+			}
+		}
+	},{
 		"type": "vmess",
 		"listen": "0.0.0.0",
 		"listen_port": 2066,
