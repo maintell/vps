@@ -15,9 +15,22 @@ systemctl disable firewalld
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
-wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64
-chmod +x /root/ntpsync_linux_x64
-echo "0 * * * * /root/ntpsync_linux_x64 2>&1 &" >> /var/spool/cron/root
+if [ ! -f "/root/ntpsync_linux_x64" ]; then
+    echo "ntpsync not found. Installing..."
+    wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64
+    chmod +x /root/ntpsync_linux_x64
+else
+    echo "ntpsync is already installed."
+fi
+
+# 检查定时任务是否已存在
+if ! crontab -l | grep -q '/root/ntpsync_linux_x64'; then
+    echo "Adding cron job for ntpsync..."
+    (crontab -l 2>/dev/null; echo "0 * * * * /root/ntpsync_linux_x64 2>&1 &") | crontab -
+    echo "Cron job added."
+else
+    echo "Cron job for ntpsync already exists."
+fi
 
 #安装nginx
 installnginx(){
@@ -34,10 +47,10 @@ installnginx(){
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
 	openssl x509 -req -days 18250 -in /etc/nginx/cert.csr -signkey /etc/nginx/cert.key -out /etc/nginx/cert.crt
 	echo -e "${Info} nginx服务配置中..."
-	wget -P /etc/nginx/ -N --no-check-certificate http://${github}/nginx/nginx.conf
+	wget -P /etc/nginx/ -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/nginx/nginx.conf
 	echo -e "${Info} 开始初始化网站内容为java帮助文件..."
 	yum -y install unzip
-	wget -P /usr/share/nginx/html/ -N --no-check-certificate http://${github}/nginx/docs.zip
+	wget -P /usr/share/nginx/html/ -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/nginx/docs.zip
 	unzip -o -q /usr/share/nginx/html/docs.zip -d /usr/share/nginx/html/
 	echo -e "${Info} 重启nginx服务..."
 	systemctl restart nginx
@@ -50,7 +63,7 @@ installudpmask(){
 	echo -e "${Info} 开始安装udpmask..."
 	mkdir /root/udp
 	echo -e "${Info} 下载udpmask必要的文件..."
-	wget -N --no-check-certificate http://${github}/udpmask/udpmask -O /usr/local/bin/udpmask
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/udpmask/udpmask -O /usr/local/bin/udpmask
 	chmod +x /usr/local/bin/udpmask
 	echo "* * * * * /usr/local/bin/udpmask -m server -c 127.0.0.1 -o 5060 -p 992 -t 5 -d" >> /var/spool/cron/root
 	start_menu
@@ -61,10 +74,10 @@ installudp2raw(){
 	echo -e "${Info} 开始安装udp2raw..."
 	mkdir /root/udp
 	echo -e "${Info} 下载udp2raw必要的文件..."
-	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64
-	wget -N --no-check-certificate http://${github}/udp2raw/udp2raw_amd64 -O /usr/local/bin/udp2raw_amd64
-	wget -N --no-check-certificate http://${github}/udp2raw/udp2rawServer.service -O /etc/systemd/system/udp2rawServer.service
-	wget -P /root/udp -N --no-check-certificate http://${github}/udp2raw/start.sh
+	wget -P /root/udp -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/udp2raw/udp2raw_amd64
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/udp2raw/udp2raw_amd64 -O /usr/local/bin/udp2raw_amd64
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/udp2raw/udp2rawServer.service -O /etc/systemd/system/udp2rawServer.service
+	wget -P /root/udp -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/udp2raw/start.sh
 	chmod +x /root/udp/udp2raw_amd64
 	chmod +x /root/udp/start.sh
 	chmod +x /usr/local/bin/udp2raw_amd64
@@ -78,8 +91,8 @@ installrabbit(){
 	echo -e "${Info} 开始安装rabbit tcp..."
 	mkdir /root/udp
 	echo -e "${Info} 下载rabbit tcp必要的文件..."
-	wget -N --no-check-certificate http://${github}/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
-	wget -N --no-check-certificate http://${github}/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
 	chmod +x /usr/local/bin/rabbit-linux-amd64
 	systemctl enable rabbit.service
 	systemctl start rabbit.service
@@ -92,12 +105,12 @@ installtuic(){
 	wget -N --no-check-certificate https://github.com/EAimTY/tuic/releases/download/tuic-server-1.0.0/tuic-server-1.0.0-x86_64-unknown-linux-musl -O /usr/local/bin/tuic
 	chmod +x /usr/local/bin/tuic
 	mkdir /usr/local/etc/tuic
-	wget -N --no-check-certificate http://${github}/tuic/config.json -O /usr/local/etc/tuic/config.json
-	wget -N --no-check-certificate http://${github}/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem
-	wget -N --no-check-certificate http://${github}/tuic/cert.der -O /usr/local/etc/tuic/cert.der
-	wget -N --no-check-certificate http://${github}/tuic/key.pem -O /usr/local/etc/tuic/key.pem
-	wget -N --no-check-certificate http://${github}/tuic/key.der -O /usr/local/etc/tuic/key.der
-	wget -N --no-check-certificate http://${github}/tuic/tuic.service -O /etc/systemd/system/tuic.service 
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/config.json -O /usr/local/etc/tuic/config.json
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/cert.pem -O /usr/local/etc/tuic/cert.pem
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/cert.der -O /usr/local/etc/tuic/cert.der
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/key.pem -O /usr/local/etc/tuic/key.pem
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/key.der -O /usr/local/etc/tuic/key.der
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/tuic/tuic.service -O /etc/systemd/system/tuic.service 
 	echo -e "${Info}  tuic服务使能..."	
 	systemctl enable tuic.service
 	systemctl start  tuic.service
@@ -114,7 +127,7 @@ installhy(){
 	chown hysteria /etc/hysteria/server.key
         chown hysteria /etc/hysteria/server.crt
 	echo -e "${Info}  hysteria服务使能..."
-      	wget -N --no-check-certificate http://${github}/hysteria/config.yaml -O /etc/hysteria/config.yaml
+      	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/hysteria/config.yaml -O /etc/hysteria/config.yaml
 	sysctl -w net.core.rmem_max=16777216
         sysctl -w net.core.wmem_max=16777216
 	sysctl 	sysctl -p
@@ -152,7 +165,7 @@ startsingbox(){
     	bash <(curl -fsSL https://tcp.hy2.sh/)
 	echo -e "${Info} singbox安装执行中..."
  	bash <(curl -fsSL https://sing-box.app/rpm-install.sh)
-	wget -N --no-check-certificate http://${github}/singbox/config.json -O /etc/sing-box/config.json
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/singbox/config.json -O /etc/sing-box/config.json
   	systemctl enable sing-box
 	systemctl start sing-box
  	systemctl status sing-box
@@ -167,7 +180,7 @@ installv2(){
 	wget -O "/usr/local/share/xray/geosite.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geosite.dat
 	wget -O "/usr/local/share/xray/geoip.dat" https://cdn.jsdelivr.net/gh/Loyalsoldier/v2ray-rules-dat@release/geoip.dat
 	echo -e "${Info} v2配置中..."
-	wget -P /usr/local/etc/xray/ -N --no-check-certificate http://${github}/v2/config.json
+	wget -P /usr/local/etc/xray/ -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/v2/config.json
 	echo -e "${Info} v2服务使能..."
 	systemctl enable xray
 	echo -e "${Info} 重启v2服务..."
@@ -178,17 +191,17 @@ installv2(){
 installbbr(){
 	kernel_version="4.11.8"
 	if [[ "${release}" == "centos" ]]; then
-		rpm --import http://${github}/bbr/${release}/RPM-GPG-KEY-elrepo.org
-		yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-${kernel_version}.rpm
+		rpm --import https://raw.githubusercontent.com/maintell/vps/master/bbr/${release}/RPM-GPG-KEY-elrepo.org
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/bbr/${release}/${version}/${bit}/kernel-ml-${kernel_version}.rpm
 		yum remove -y kernel-headers
-		yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-headers-${kernel_version}.rpm
-		yum install -y http://${github}/bbr/${release}/${version}/${bit}/kernel-ml-devel-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/bbr/${release}/${version}/${bit}/kernel-ml-headers-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/bbr/${release}/${version}/${bit}/kernel-ml-devel-${kernel_version}.rpm
 	elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
 		mkdir bbr && cd bbr
 		wget http://security.debian.org/debian-security/pool/updates/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u10_amd64.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
-		wget -N --no-check-certificate http://${github}/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbr/debian-ubuntu/linux-headers-${kernel_version}-all.deb
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbr/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbr/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
 	
 		dpkg -i libssl1.0.0_1.0.1t-1+deb8u10_amd64.deb
 		dpkg -i linux-headers-${kernel_version}-all.deb
@@ -210,14 +223,14 @@ installbbr(){
 installbbrplus(){
 	kernel_version="4.14.129-bbrplus"
 	if [[ "${release}" == "centos" ]]; then
-		wget -N --no-check-certificate https://${github}/bbrplus/${release}/${version}/kernel-${kernel_version}.rpm 
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbrplus/${release}/${version}/kernel-${kernel_version}.rpm 
 		yum install -y kernel-${kernel_version}.rpm
 		rm -f kernel-${kernel_version}.rpm
 		kernel_version="4.14.129_bbrplus" #fix a bug
 	elif [[ "${release}" == "debian" || "${release}" == "ubuntu" ]]; then
 		mkdir bbrplus && cd bbrplus
-		wget -N --no-check-certificate http://${github}/bbrplus/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
-		wget -N --no-check-certificate http://${github}/bbrplus/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbrplus/debian-ubuntu/${bit}/linux-headers-${kernel_version}.deb
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbrplus/debian-ubuntu/${bit}/linux-image-${kernel_version}.deb
 		dpkg -i linux-headers-${kernel_version}.deb
 		dpkg -i linux-image-${kernel_version}.deb
 		cd .. && rm -rf bbrplus
@@ -235,17 +248,17 @@ installbbrplus(){
 #安装Lotserver内核
 installlot(){
 	if [[ "${release}" == "centos" ]]; then
-		rpm --import http://${github}/lotserver/${release}/RPM-GPG-KEY-elrepo.org
+		rpm --import https://raw.githubusercontent.com/maintell/vps/master/lotserver/${release}/RPM-GPG-KEY-elrepo.org
 		yum remove -y kernel-firmware
-		yum install -y http://${github}/lotserver/${release}/${version}/${bit}/kernel-firmware-${kernel_version}.rpm
-		yum install -y http://${github}/lotserver/${release}/${version}/${bit}/kernel-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/lotserver/${release}/${version}/${bit}/kernel-firmware-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/lotserver/${release}/${version}/${bit}/kernel-${kernel_version}.rpm
 		yum remove -y kernel-headers
-		yum install -y http://${github}/lotserver/${release}/${version}/${bit}/kernel-headers-${kernel_version}.rpm
-		yum install -y http://${github}/lotserver/${release}/${version}/${bit}/kernel-devel-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/lotserver/${release}/${version}/${bit}/kernel-headers-${kernel_version}.rpm
+		yum install -y https://raw.githubusercontent.com/maintell/vps/master/lotserver/${release}/${version}/${bit}/kernel-devel-${kernel_version}.rpm
 	elif [[ "${release}" == "ubuntu" ]]; then
-		bash <(wget --no-check-certificate -qO- "http://${github}/Debian_Kernel.sh")
+		bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/maintell/vps/master/Debian_Kernel.sh")
 	elif [[ "${release}" == "debian" ]]; then
-		bash <(wget --no-check-certificate -qO- "http://${github}/Debian_Kernel.sh")
+		bash <(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/maintell/vps/master/Debian_Kernel.sh")
 	fi
 	detele_kernel
 	BBR_grub
@@ -279,7 +292,7 @@ startbbrmod(){
 	if [[ "${release}" == "centos" ]]; then
 		yum install -y make gcc
 		mkdir bbrmod && cd bbrmod
-		wget -N --no-check-certificate http://${github}/bbr/tcp_tsunami.c
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbr/tcp_tsunami.c
 		echo "obj-m:=tcp_tsunami.o" > Makefile
 		make -C /lib/modules/$(uname -r)/build M=`pwd` modules CC=/usr/bin/gcc
 		chmod +x ./tcp_tsunami.ko
@@ -296,7 +309,7 @@ startbbrmod(){
 		fi
 		apt-get -y install make gcc
 		mkdir bbrmod && cd bbrmod
-		wget -N --no-check-certificate http://${github}/bbr/tcp_tsunami.c
+		wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/bbr/tcp_tsunami.c
 		echo "obj-m:=tcp_tsunami.o" > Makefile
 		ln -s /usr/bin/gcc /usr/bin/gcc-4.9
 		make -C /lib/modules/$(uname -r)/build M=`pwd` modules CC=/usr/bin/gcc-4.9
@@ -460,14 +473,14 @@ net.ipv4.ip_forward = 1">>/etc/sysctl.conf
 #更新脚本
 Update_Shell(){
 	echo -e "当前版本为 [ ${sh_ver} ]，开始检测最新版本..."
-	sh_new_ver=$(wget --no-check-certificate -qO- "http://${github}/install.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
+	sh_new_ver=$(wget --no-check-certificate -qO- "https://raw.githubusercontent.com/maintell/vps/master/install.sh"|grep 'sh_ver="'|awk -F "=" '{print $NF}'|sed 's/\"//g'|head -1)
 	[[ -z ${sh_new_ver} ]] && echo -e "${Error} 检测最新版本失败 !" && start_menu
 	if [[ ${sh_new_ver} != ${sh_ver} ]]; then
 		echo -e "发现新版本[ ${sh_new_ver} ]，是否更新？[Y/n]"
 		read -p "(默认: y):" yn
 		[[ -z "${yn}" ]] && yn="y"
 		if [[ ${yn} == [Yy] ]]; then
-			wget -N --no-check-certificate http://${github}/install.sh && chmod +x install.sh
+			wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/install.sh && chmod +x install.sh
 			echo -e "脚本已更新为最新版本[ ${sh_new_ver} ] !"
 		else
 			echo && echo "	已取消..." && echo
