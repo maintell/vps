@@ -34,14 +34,12 @@ fi
 
 #安装nginx
 installnginx(){
-	echo -e "${Info} 开始安装nginx所需的源..."
-	yum install -y epel-release
-	echo -e "${Info} yum安装nginx..."
-	yum install -y nginx
+	echo -e "${Info} 安装nginx..."
+	apt install -y nginx
 	echo -e "${Info} nginx服务使能..."
 	systemctl enable nginx
 	echo -e "${Info} nginx服务ssl自签名证书生成..."
-	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 1024
+	openssl genrsa -des3 -passout pass:123456 -out /etc/nginx/cert.key 2048
 	openssl req -passin pass:123456 -new -subj "/C=US/ST=WA/L=Oracle/O=Oracle/OU=Oracle/CN=cdn.oracle.com" -key /etc/nginx/cert.key -out /etc/nginx/cert.csr
 	mv /etc/nginx/cert.key /etc/nginx/cert.origin.key
 	openssl rsa -passin pass:123456 -in /etc/nginx/cert.origin.key -out /etc/nginx/cert.key
@@ -49,9 +47,10 @@ installnginx(){
 	echo -e "${Info} nginx服务配置中..."
 	wget -P /etc/nginx/ -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/nginx/nginx.conf
 	echo -e "${Info} 开始初始化网站内容为java帮助文件..."
-	yum -y install unzip
+	apt -y install unzip
 	wget -P /usr/share/nginx/html/ -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/nginx/docs.zip
 	unzip -o -q /usr/share/nginx/html/docs.zip -d /usr/share/nginx/html/
+        rm /usr/share/nginx/html/docs.zip
 	echo -e "${Info} 重启nginx服务..."
 	systemctl restart nginx
 	start_menu
@@ -86,19 +85,6 @@ installudp2raw(){
 	start_menu
 }
 
-#安装rabbit
-installrabbit(){
-	echo -e "${Info} 开始安装rabbit tcp..."
-	mkdir /root/udp
-	echo -e "${Info} 下载rabbit tcp必要的文件..."
-	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/rabbit/rabbit-linux-amd64 -O /usr/local/bin/rabbit-linux-amd64
-	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/rabbit/rabbit.service -O /etc/systemd/system/rabbit.service
-	chmod +x /usr/local/bin/rabbit-linux-amd64
-	systemctl enable rabbit.service
-	systemctl start rabbit.service
-	start_menu
-}
-
 #安装tuic
 installtuic(){
 	echo -e "${Info} tuic安装脚本执行中..."
@@ -130,7 +116,7 @@ installhy(){
       	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/hysteria/config.yaml -O /etc/hysteria/config.yaml
 	sysctl -w net.core.rmem_max=16777216
         sysctl -w net.core.wmem_max=16777216
-	sysctl 	sysctl -p
+	sysctl -p
         mkdir /etc/systemd/system/hysteria-server.service.d/
 	touch /etc/systemd/system/hysteria-server.service.d/priority.conf
         echo "[Service]" >> /etc/systemd/system/hysteria-server.service.d/priority.conf
@@ -596,7 +582,6 @@ case "$num" in
 	19)	
 	installv2
 	installudp2raw
-	installrabbit
 	installnginx
 	;;
 	*)
