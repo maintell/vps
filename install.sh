@@ -16,7 +16,7 @@ sed -i 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/selinux/config
 sed -i 's/SELINUX=permissive/SELINUX=disabled/g' /etc/selinux/config
 setenforce 0
 if [ ! -f "/root/ntpsync_linux_x64" ]; then
-    echo "ntpsync not found. Installing..."
+    echo     echo "ntpsync not found. Installing..."
     wget -O "/root/ntpsync_linux_x64" https://github.com/maintell/ntpsync/releases/download/1/ntpsync_linux_x64
     chmod +x /root/ntpsync_linux_x64
 else
@@ -143,14 +143,10 @@ startkernal(){
 }
 
 startsingbox(){	
-	echo -e "${Info} tcpbrutal安装脚本执行中..."
- 	yum install -y centos-release-scl
- 	yum install -y devtoolset-9-gcc*
-  	scl enable devtoolset-9 bash
-   	gcc -v
+	echo -e "${Info} tcp-brutal安装脚本执行中..." 	
     	bash <(curl -fsSL https://tcp.hy2.sh/)
 	echo -e "${Info} singbox安装执行中..."
- 	bash <(curl -fsSL https://sing-box.app/rpm-install.sh)
+ 	bash <(curl -fsSL https://sing-box.app/install.sh)
 	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/singbox/config.json -O /etc/sing-box/config.json
   	systemctl enable sing-box
 	systemctl start sing-box
