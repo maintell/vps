@@ -131,7 +131,10 @@ installhy(){
 	cp /etc/systemd/system/hysteria-server.service /etc/systemd/system/hysteria2-server.service
 	sudo sed -i 's|ExecStart=/usr/local/bin/hysteria server --config /etc/hysteria/config.yaml|ExecStart=/usr/local/bin/hysteria2 server --config /etc/hysteria2/config.yaml|' /etc/systemd/system/hysteria2-server.service
 	mkdir -p /etc/hysteria2/
-	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/hysteria/hysteria2.yaml -O /etc/hysteria2/config.yaml
+	wget -N --no-check-certificate https://raw.githubusercontent.com/maintell/vps/master/hysteria/hysteria2.yaml -O /etc/hysteria2/config.yaml	
+    openssl req -x509 -nodes -newkey ec:<(openssl ecparam -name prime256v1) -keyout /etc/hysteria2/server.key -out /etc/hysteria2/server.crt -subj "/CN=bing.com" -days 36500
+	chown hysteria /etc/hysteria2/server.key
+    chown hysteria /etc/hysteria2/server.crt
     mkdir /etc/systemd/system/hysteria2-server.service.d/
 	touch /etc/systemd/system/hysteria2-server.service.d/priority.conf
     echo "[Service]" >> /etc/systemd/system/hysteria2-server.service.d/priority.conf
