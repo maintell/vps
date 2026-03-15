@@ -1,0 +1,62 @@
+listen: :32053
+
+tls:
+  cert: /etc/hysteria2/server.crt
+  key: /etc/hysteria2/server.key
+
+auth:
+  type: password
+  password: maintell
+
+obfs:
+  type: webrtc
+
+acl:
+  inline: 
+    - reject(all, udp/443)
+    - direct(all, udp/53)
+    - direct(suffix:apple.com)
+    - direct(geoip:telegram)
+    - direct(suffix:telegram.org)
+    - direct(suffix:tdesktop.com)
+    - direct(all)
+
+resolver:
+  type: udp
+  tcp:
+    addr: 8.8.8.8:53
+    timeout: 4s
+  udp:
+    addr: 1.1.1.1
+    timeout: 4s
+  tls:
+    addr: 1.1.1.1:853
+    timeout: 10s
+    sni: cloudflare-dns.com
+    insecure: false
+  https:
+    addr: 1.1.1.1:443
+    timeout: 10s
+    sni: cloudflare-dns.com
+    insecure: false
+
+outbounds:
+  - name: warp
+    type: socks5
+    socks5:
+      addr: 127.0.0.1:9091
+
+masquerade:
+  type: proxy
+  file:
+    dir: /usr/share/nginx/html
+  proxy:
+    url: https://bing.com
+    rewriteHost: true
+  listenHTTPS: :32053
+  forceHTTPS: true  
+quic:
+  initStreamReceiveWindow: 53687090
+  maxStreamReceiveWindow: 53687090
+  initConnReceiveWindow: 134217728
+  maxConnReceiveWindow: 134217728
