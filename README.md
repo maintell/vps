@@ -4,3 +4,10 @@ wget -N --no-check-certificate "https://raw.githubusercontent.com/maintell/vps/m
 chmod +x install.sh
 ./install.sh
 ```
+
+```
+wget -N --no-check-certificate "https://raw.githubusercontent.com/maintell/vps/master/ubuntu.sh"
+chmod +x ubuntu.sh
+./ubuntu.sh
+```
+
