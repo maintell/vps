@@ -58,3 +58,4 @@ systemctl daemon-reload
 systemctl restart hysteria2-server.service 
 systemctl enable hysteria2-server.service
 systemctl start  hysteria2-server.service
+iptables -t nat -A PREROUTING -i eth0 -p udp --dport 35000:60000 -j REDIRECT --to-ports 32053
